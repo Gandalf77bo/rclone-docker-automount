@@ -11,15 +11,21 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 USERNAME = os.getenv('RCLONE_USERNAME')
 PASSWORD = os.getenv('RCLONE_PASSWORD')
 PORT = os.getenv('RCLONE_PORT') or '5572'
+SSL_CERT = os.getenv('RCLONE_CERT')
+SSL_KEY = os.getenv('RCLONE_KEY')
+SSL_VERIFY = os.getenv('RCLONE_SSLVERIFY') or False
+HTTP = 'http' if (SSL_CERT is None) or (SSL_KEY is None) else 'https' 
+MYCERT=(SSL_CERT, SSL_KEY)
+
 # Constants
-RCLONE_URL = f"http://rclone:{PORT}"
+RCLONE_URL = f"{HTTP}://rclone:{PORT}"
 AUTH = HTTPBasicAuth(USERNAME, PASSWORD) if USERNAME and PASSWORD else None
 HEADERS = {'Content-Type': 'application/json', 'User-Agent': 'RcloneClient/1.0'}
 RETRY_INTERVAL = 10  # seconds
 
 def is_rclone_ready():
     try:
-        response = requests.options(f"{RCLONE_URL}/rc/noopauth", auth=AUTH)
+        response = requests.options(f"{RCLONE_URL}/rc/noopauth", auth=AUTH, cert=MYCERT, verify=SSL_VERIFY)
         return response.ok
     except requests.exceptions.RequestException as e:
         logging.error(f"Error checking rclone readiness: {e}")
@@ -40,7 +46,7 @@ def mount_payloads(mount_payloads):
     for mount_payload in mount_payloads:
         try:
             logging.info(f"Mounting {mount_payload['fs']} to {mount_payload['mountPoint']}")
-            response = requests.post(f"{RCLONE_URL}/mount/mount", json=mount_payload, headers=HEADERS, auth=AUTH)
+            response = requests.post(f"{RCLONE_URL}/mount/mount", json=mount_payload, headers=HEADERS, auth=AUTH, cert=MYCERT, verify=SSL_VERIFY)
             if response.ok:
                 logging.info(f"Mount successful.")
             else:
