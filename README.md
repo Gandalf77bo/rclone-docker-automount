@@ -58,8 +58,11 @@ The key points to populate in the compose file are the initializer volume mount 
       - RCLONE_USERNAME=AGOODUSERNAME
       - RCLONE_PASSWORD=AGOODPASSWORD
       - RCLONE_PORT=5572
+      - RCLONE_CERT=cert_file # path to SSL cert
+      - RCLONE_KEY=key_file # path o SSL key
+      - RCLONE_SSLVERIFY=true # allow check SSL certificate or not
     volumes:
-      - /docker/rclone/initializer/mounts.json:/app/mounts.json
+      - /docker/rclone/initializer:/app
 ...
 ```
 
