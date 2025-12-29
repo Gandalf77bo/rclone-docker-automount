@@ -18,7 +18,7 @@ HTTP = 'http' if (SSL_CERT is None) or (SSL_KEY is None) else 'https'
 MYCERT=(SSL_CERT, SSL_KEY)
 
 # Constants
-RCLONE_URL = f"{HTTP}://127.0.0.1:{PORT}"
+RCLONE_URL = f"{HTTP}://rclone:{PORT}"
 AUTH = HTTPBasicAuth(USERNAME, PASSWORD) if USERNAME and PASSWORD else None
 HEADERS = {'Content-Type': 'application/json', 'User-Agent': 'RcloneClient/1.0'}
 RETRY_INTERVAL = 10  # seconds
