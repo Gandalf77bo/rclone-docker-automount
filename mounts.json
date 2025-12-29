@@ -15,12 +15,12 @@
     "mountOpt": {
       "AllowOther": true,
       "AllowNonEmpty": true,
-	    "AllowRoot": true      
+	  "AllowRoot": true      
     },
     "vfsOpt": {
       "CacheMode": "full",
-	    "GID": 1000,
-	    "UID": 1000      
+	  "GID": 1000,
+	  "UID": 1000      
     }
   }
 ]
