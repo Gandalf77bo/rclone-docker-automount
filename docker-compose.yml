@@ -1,12 +1,11 @@
-version: "3.8"
 services:
   rclone:
     image: rclone/rclone:latest
     container_name: rclone
     volumes:
-      - ./config:/config/rclone
-      - ./logs:/logs
-      - ./cache:/root/.cache/rclone # This is for the WebUI, not VFS
+      - /opt/docker/rclone/config:/config/rclone
+      - /opt/docker/logs:/logs
+      - /opt/docker/cache:/root/.cache/rclone # This is for the WebUI, not VFS
       - /:/hostfs:rshared
       - /var/cache/rclone:/vfsCache
       - /etc/passwd:/etc/passwd:ro
@@ -25,11 +24,14 @@ services:
       - --rc-addr=:5572
       - --rc-user=AGOODUSERNAME
       - --rc-pass=AGOODPASSWORD
+      - --rc-cert=/etc/letsencrypt/live/yourdomain.duckdns.org/fullchain.pem
+      - --rc-key=/etc/letsencrypt/live/yourdomain.duckdns.org/privkey.pem      
       - --log-file=/logs/rclone.log
       - --log-level=NOTICE
       - --cache-dir=/vfsCache
+    network_mode: host      # allow to configure Rclone with Oauth2
     networks:
-      - reverse-proxy-network # Optional
+#      - reverse-proxy-network # Optional
       - rclone-net
     # If not using reverse proxy, provide a host:container port for --rc-addr
     #ports:
@@ -51,8 +53,8 @@ services:
       - rclone
     networks:
       - rclone-net
-networks:
-  reverse-proxy-network:
-    name: reverse-proxy-network
-    external: true
-  rclone-net:
+#networks:
+#  reverse-proxy-network:
+#    name: reverse-proxy-network
+#    external: true
+#  rclone-net:
