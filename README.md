@@ -94,10 +94,14 @@ You can provide specific parameters as detailed in [rclone Config Options](/rclo
     "fs": "GoogleDrive:",
     "mountPoint": "/hostfs/gdrive/grive_0",
     "mountOpt": {
-      "AllowOther": true
+	  "AllowOther": true,
+	  "AllowNonEmpty": true,
+	  "AllowRoot": true
     },
     "vfsOpt": {
-      "CacheMode": "full"
+      "CacheMode": "full",
+      "GID": 1000,
+      "UID": 1000
     }
   }
 ]
